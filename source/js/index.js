@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import Relay from 'react-relay';
+import Main from './components/Main';
+import HomeRoute from './routes/HomeRoute';
 
-class App extends Component {
-	render() {
-		return <h1>Hello JSX from React</h1>
-	}
-}
-
-render(<App />, document.getElementById('app'));
+render(
+	<Relay.RootContainer
+		Component={Main}
+		route={new HomeRoute()} />,
+	document.getElementById('app')
+);
