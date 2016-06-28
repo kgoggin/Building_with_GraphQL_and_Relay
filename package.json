@@ -28,6 +28,7 @@
     "express": "^4.14.0",
     "express-graphql": "^0.5.3",
     "graphql": "^0.6.0",
+    "graphql-relay": "^0.4.2",
     "jquery": "^3.0.0",
     "nodemon": "^1.9.2",
     "react": "^15.1.0",
@@ -44,7 +45,7 @@
       "react"
     ],
     "plugins": [
-			"transform-class-properties",
+      "transform-class-properties",
       "./babelRelayPlugin"
     ],
     "env": {

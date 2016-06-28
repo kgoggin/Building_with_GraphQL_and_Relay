@@ -3,8 +3,13 @@ import {
 	GraphQLObjectType,
 	GraphQLList,
 	GraphQLInt,
-	GraphQLString
+	GraphQLString,
+	GraphQLNonNull
 } from 'graphql';
+
+import { mutationWithClientMutationId } from 'graphql-relay';
+
+import { createLink } from './links';
 
 let Schema = (data) => {
 	let store = {};
@@ -25,10 +30,31 @@ let Schema = (data) => {
 		name: 'Link',
 		fields: function() { 
 			return  {
-				_id: { type: GraphQLString },
+				id: { type: GraphQLString },
 				title: { type: GraphQLString },
 				url: { type: GraphQLString }
 			}
+		}
+	});
+
+	let createLinkMutation = mutationWithClientMutationId({
+		name: 'CreateLink',
+
+		inputFields: {
+			title: { type: new GraphQLNonNull(GraphQLString) },
+			url: { type: new GraphQLNonNull(GraphQLString) }
+		},
+		outputFields: {
+			link: {
+				type: linkType,
+				resolve: (obj) => {
+					return obj;
+				}
+			}
+		},
+		mutateAndGetPayload: ({title, url}) => {
+			let newLink = createLink(title, url);
+			return newLink;
 		}
 	});
 
@@ -39,8 +65,17 @@ let Schema = (data) => {
 				return {
 					store: {
 						type: storeType,
-						resolve: () =>  store  // TODO: Bring in data.
+						resolve: () =>  store
 					}
+				}
+			}
+		}),
+
+		mutation: new GraphQLObjectType({
+			name: "Mutation",
+			fields: function() {
+				return {
+					createLink: createLinkMutation
 				}
 			}
 		})
