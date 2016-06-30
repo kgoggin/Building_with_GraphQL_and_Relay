@@ -7,11 +7,10 @@ import Link from './Link';
 class Main extends Component {
 	handleSubmit = (event) => {
 		event.preventDefault();
-		Relay.Store.update(
+		Relay.Store.commitUpdate(
 			new CreateLinkMutation({
 				title: this.refs.newTitle.value,
-				url: this.refs.newUrl.value,
-				store: this.props.store
+				url: this.refs.newUrl.value
 			})
 		);
 		this.refs.newTitle.value = "";
@@ -21,7 +20,7 @@ class Main extends Component {
 	render() {
 		let content = this.props.store.links.map( link => {
 			return (
-				<Link key={link._id} link={link} />
+				<Link key={link.id} link={link} />
 			)
 		});
 
@@ -45,7 +44,7 @@ export default Relay.createContainer(Main, {
 	fragments: {
 		store: () => Relay.QL`
 			fragment on Store {
-				links {
+				links{
 					id,
 					${Link.getFragment('link')}
 				}

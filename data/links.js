@@ -25,7 +25,6 @@ export function createLink (linkTitle, linkUrl) {
 		title: linkTitle,
 		url: linkUrl
 	}
-	links.push(newLink);
 	return newLink;
 }
 

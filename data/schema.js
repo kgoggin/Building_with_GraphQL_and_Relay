@@ -7,7 +7,10 @@ import {
 	GraphQLNonNull
 } from 'graphql';
 
-import { mutationWithClientMutationId } from 'graphql-relay';
+import { 
+	mutationWithClientMutationId, 
+	globalIdField 
+} from 'graphql-relay';
 
 import { createLink } from './links';
 
@@ -18,6 +21,7 @@ let Schema = (data) => {
 		name: 'Store',
 		fields: function() {
 			return {
+				id: globalIdField("Store"),
 				links: {
 					type: new GraphQLList(linkType),
 					resolve: () => data
@@ -50,10 +54,15 @@ let Schema = (data) => {
 				resolve: (obj) => {
 					return obj;
 				}
+			},
+			store: {
+				type: storeType,
+				resolve: () => store
 			}
 		},
 		mutateAndGetPayload: ({title, url}) => {
 			let newLink = createLink(title, url);
+			data.push(newLink);
 			return newLink;
 		}
 	});
