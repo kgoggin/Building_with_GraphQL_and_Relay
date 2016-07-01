@@ -4,7 +4,7 @@ import GraphQLHTTP from 'express-graphql';
 import path from 'path';
 import config from './webpack.config';
 import Schema from './data/schema';
-import links from './data/links';
+import * as Links from './data/links';
 
 /* eslint-disable no-console */
 
@@ -20,7 +20,8 @@ app.use(require('webpack-dev-middleware')(compiler, {
 app.use(require('webpack-hot-middleware')(compiler));
 
 app.use('/graphql', GraphQLHTTP({
-	schema: Schema(links),
+	schema: Schema,
+	context: { Links },
 	graphiql: true
 }));
 

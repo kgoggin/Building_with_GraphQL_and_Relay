@@ -1,12 +1,14 @@
-let links = [{
-	"id": 42,
-	"title": "React.js Home Page",
-	"url": "https://facebook.github.io/react"
-}, {
-	"id": 43,
-	"title": "Relay.js Home Page",
-	"url": "https://facebook.github.io/relay"
-}];
+// to make it easier to reference entities, we'll do a map instead of an array
+const store = {
+	"42": {
+		"title": "React.js Home Page",
+		"url": "https://facebook.github.io/react"
+	},
+	"43": {
+		"title": "Relay.js Home Page",
+		"url": "https://facebook.github.io/relay"
+	}
+}
 
 function generateHash(title) {
 	var hash = 0, i, chr, len;
@@ -19,13 +21,37 @@ function generateHash(title) {
 	return Math.abs(hash);
 }
 
-export function createLink (linkTitle, linkUrl) {
-	var newLink = {
-		id: generateHash(linkTitle),
-		title: linkTitle,
-		url: linkUrl
+export const getLink = (id) => {
+	if (store[id]) {
+		return Object.assign({},
+			store[id],
+			{ id }
+		);
 	}
-	return newLink;
-}
 
-export default links;
+	return null;
+};
+
+export const getLinks = () => {
+	return Object.keys(store).map(id => {
+		return Object.assign({},
+			store[id],
+			{ id }
+		);
+	});
+};
+
+export const addLink = (title, url) => {
+	const id = generateHash(title);
+	const newLink = {
+		title,
+		url
+	};
+
+	store[id] = newLink;
+
+	return Object.assign({},
+		newLink,
+		{ id }
+	);
+};
